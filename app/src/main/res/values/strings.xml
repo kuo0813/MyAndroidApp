@@ -6,4 +6,5 @@
     <string name="resume">继续</string>
     <!-- default timer text -->
     <string name="timer_default">00:00</string>
+    <string name="running_in_background">Metronome running</string>
 </resources>
