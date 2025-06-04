@@ -32,5 +32,4 @@
             android:text="@string/pause"
             android:layout_marginStart="16dp" />
     </LinearLayout>
-
 </LinearLayout>
