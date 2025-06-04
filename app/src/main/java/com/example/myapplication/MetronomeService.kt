@@ -11,6 +11,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.PowerManager
+
 import androidx.core.app.NotificationCompat
 
 class MetronomeService : Service() {
@@ -26,6 +28,8 @@ class MetronomeService : Service() {
     }
 
     private lateinit var vibrator: Vibrator
+    private lateinit var wakeLock: PowerManager.WakeLock
+
     private val timerHandler = Handler(Looper.getMainLooper())
     private val beatHandler = Handler(Looper.getMainLooper())
 
@@ -51,6 +55,9 @@ class MetronomeService : Service() {
     override fun onCreate() {
         super.onCreate()
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MetronomeService::WakeLock")
+        wakeLock.acquire()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -103,6 +110,13 @@ class MetronomeService : Service() {
         } else {
             @Suppress("DEPRECATION")
             vibrator.vibrate(duration)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (wakeLock.isHeld) {
+            wakeLock.release()
         }
     }
 
