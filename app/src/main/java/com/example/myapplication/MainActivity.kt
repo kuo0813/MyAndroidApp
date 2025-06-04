@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -27,6 +28,14 @@ class MainActivity : AppCompatActivity() {
 
     private val timerHandler = Handler(Looper.getMainLooper())
     private val beatHandler = Handler(Looper.getMainLooper())
+
+    private fun startServiceCompat(intent: Intent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
+    }
 
     private val timerRunnable: Runnable = object : Runnable {
         override fun run() {
@@ -82,6 +91,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startMetronome() {
+        if (MetronomeService.running) {
+            val intent = Intent(this, MetronomeService::class.java).apply {
+                action = MetronomeService.ACTION_STOP
+            }
+            startService(intent)
+        }
         running = true
         paused = false
         seconds = 0
@@ -94,6 +109,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopMetronome() {
+        if (MetronomeService.running) {
+            val intent = Intent(this, MetronomeService::class.java).apply {
+                action = MetronomeService.ACTION_STOP
+            }
+            startService(intent)
+        }
         running = false
         paused = false
         timerHandler.removeCallbacks(timerRunnable)
@@ -119,11 +140,42 @@ class MainActivity : AppCompatActivity() {
         pauseButton.text = getString(R.string.pause)
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (running && !paused && !MetronomeService.running) {
+            val intent = Intent(this, MetronomeService::class.java).apply {
+                action = MetronomeService.ACTION_START
+                putExtra(MetronomeService.EXTRA_SECONDS, seconds)
+                putExtra(MetronomeService.EXTRA_BEAT_COUNT, beatCount)
+            }
+            startServiceCompat(intent)
+            timerHandler.removeCallbacks(timerRunnable)
+            beatHandler.removeCallbacks(beatRunnable)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (MetronomeService.running) {
+            seconds = MetronomeService.seconds
+            beatCount = MetronomeService.beatCount
+            val mins = seconds / 60
+            val secs = seconds % 60
+            timerText.text = String.format("%02d:%02d", mins, secs)
+            val intent = Intent(this, MetronomeService::class.java).apply {
+                action = MetronomeService.ACTION_STOP
+            }
+            startService(intent)
+            timerHandler.postDelayed(timerRunnable, 1000)
+            beatHandler.post(beatRunnable)
+        }
+    }
+
     private fun vibrateBeat() {
-        val duration = if (beatCount % 2 == 0) 100L else 50L
+        val duration = if (beatCount % 2 == 0) 200L else 100L
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(
-                VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
+                VibrationEffect.createOneShot(duration, 255)
             )
         } else {
             @Suppress("DEPRECATION")
