@@ -10,6 +10,7 @@ import android.os.Vibrator
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,13 +45,14 @@ class MainActivity : AppCompatActivity() {
             if (running && !paused) {
                 vibrateBeat()
                 beatCount++
-                beatHandler.postDelayed(this, 333)
+                beatHandler.postDelayed(this, 666)
             }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setContentView(R.layout.activity_main)
 
         timerText = findViewById(R.id.timerText)

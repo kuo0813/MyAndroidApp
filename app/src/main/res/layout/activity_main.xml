@@ -4,14 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/black">
 
     <TextView
         android:id="@+id/timerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00:00"
-        android:textSize="32sp"
+        android:textSize="48sp"
+        android:textColor="@color/white"
         android:layout_marginBottom="24dp" />
 
     <LinearLayout
@@ -23,13 +25,17 @@
             android:id="@+id/startStopButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/start" />
+            android:text="@string/start"
+            android:background="@drawable/round_button"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/pauseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pause"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:background="@drawable/round_button"
+            android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>
