@@ -12,6 +12,7 @@ import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.PowerManager
+
 import androidx.core.app.NotificationCompat
 
 class MetronomeService : Service() {
@@ -28,6 +29,7 @@ class MetronomeService : Service() {
 
     private lateinit var vibrator: Vibrator
     private lateinit var wakeLock: PowerManager.WakeLock
+
     private val timerHandler = Handler(Looper.getMainLooper())
     private val beatHandler = Handler(Looper.getMainLooper())
 
