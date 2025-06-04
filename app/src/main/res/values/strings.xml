@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">节拍器</string>
+    <string name="start">开始</string>
+    <string name="stop">结束</string>
+    <string name="pause">暂停</string>
+    <string name="resume">继续</string>
 </resources>
