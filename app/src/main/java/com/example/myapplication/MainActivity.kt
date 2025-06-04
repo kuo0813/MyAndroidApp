@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
             if (running && !paused) {
                 vibrateBeat()
                 beatCount++
-                // 333 ms per beat ≈ 180 BPM
-                beatHandler.postDelayed(this, 333)
+                // 667 ms per beat ≈ 90 BPM
+                beatHandler.postDelayed(this, 667)
             }
         }
     }
