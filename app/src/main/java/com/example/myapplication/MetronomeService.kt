@@ -97,9 +97,9 @@ class MetronomeService : Service() {
     }
 
     private fun vibrateBeat() {
-        val duration = if (beatCount % 2 == 0) 100L else 50L
+        val duration = if (beatCount % 2 == 0) 200L else 100L
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createOneShot(duration, 255))
         } else {
             @Suppress("DEPRECATION")
             vibrator.vibrate(duration)
